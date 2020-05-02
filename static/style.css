@@ -1,0 +1,10 @@
+ul {
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+	color: #006400;
+}
+
+a {text-decoration: none;}
+
+li {margin-right: -4px;}
