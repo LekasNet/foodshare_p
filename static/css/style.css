@@ -94,15 +94,15 @@ body {
 
 #ugolkrug{
   width:200px; /* Длина фигуры */
-  max-height:100px; /* Высота фигуры */
+  max-height:400px; /* Высота фигуры */
   color: #000000; /* цвет текста */
   background: #FFFDD0; /* фон блока */
-  border: 2px #000000 solid; /* стили рамки */
+  border: 2px #7f7f7f solid; /* стили рамки */
   border-radius: 10px;
   padding: 5px; /* внутренние отступы */
   margin: 0 auto;
   margin-top: 1%;
-
+  box-shadow: 0 0 10px #444;
 }
 
 #title{
@@ -114,4 +114,11 @@ body {
 
 #description{
   opacity: .6;
+}
+
+img {
+  border-radius: 5px;
+  width: 200px;
+  height: auto;
+  max-height: 300px;
 }
