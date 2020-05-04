@@ -2,24 +2,28 @@
 <html>
 <head>
   <title>Login</title>
+  <link href="/static/css/login.css" rel="stylesheet">
 </head>
-<body>
+<body id="login_content">
   {% extends "base.html" %}
 
   {% block content %}
-      <h1>Sign In</h1>
-      <form action="" method="post" novalidate>
-          {{ form.hidden_tag() }}
-          <p>
-              {{ form.username.label }}<br>
-              {{ form.username(size=32) }}
-          </p>
-          <p>
-              {{ form.password.label }}<br>
-              {{ form.password(size=32) }}
-          </p>
-          <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-          <p>{{ form.submit() }}</p>
+      <form action="" method="post" novalidate class="decor">
+          <div class="form-left-decoration"></div>
+          <div class="form-right-decoration"></div>
+          <div class="circle"></div>
+          <div class="form-inner">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label }}<br>
+                {{ form.username(size=32) }}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}
+            </p>
+            <p>{{ form.submit() }}</p>
+          </div>
       </form>
   {% endblock %}
 </body>
