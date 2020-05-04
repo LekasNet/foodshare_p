@@ -1,7 +1,13 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, flash, redirect
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from flask import render_template
+from forms import LoginForm
+import os
 
 
 app = Flask(__name__, static_folder="static")
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.route('/')
@@ -22,6 +28,21 @@ def contacts():
 @app.route('/FAQ')
 def faq():
     return render_template("faq_page.html")
+
+
+@app.route('/test')
+def test():
+    return rendered_page
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect('/')
+    return render_template('login.html', title='Sign In', form=form)
 
 
 if __name__ == '__main__':
