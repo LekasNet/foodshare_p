@@ -5,9 +5,10 @@
       {% else %}
       <title>welcome!</title>
       {% endif %}
+      <link href="/static/css/style.css" rel="stylesheet">
     </head>
     <body>
-        <div>Foodshare: <a href="/index">home</a></div>
+        <a id="foodshare" href="/">Foodshare:</a>
         <hr>
         {% block content %}{% endblock %}
     </body>
