@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="shortcut icon" href="/static/favicon/favicon.ico" type="image/x-icon">
-		<link href="/static/css/style.css" rel="stylesheet">
+{% extends "pages.html" %}
+{% block styles %}
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script defer src="https://lk.easynetshop.ru/frontend/v5/ens-004ae6d4.js"></script>
 		<link href="https://lk.easynetshop.ru/frontend/v5/ens-004ae6d4.css" rel="stylesheet">
 		<title>Order</title>
-	</head>
-
-	<body>
-		<nav class="top-menu sticky">
-			<ul class="menu-main">
-				<li><a href="/">Главная</a></li>
-				<li><a href="/order" class="current">Заказать</a></li>
-				<li><a href="/FAQ">FAQ</a></li>
-				<li><a href="/contacts">Контакты</a></li>
-			</ul>
-		</nav>
+{% endblock %}
+{% block content %}
+		<div id="column">
 		{}
-	</body>
+		</div>
+{% endblock %}

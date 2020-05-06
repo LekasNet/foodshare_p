@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption');
 .top-menu {
-  margin: 0 20px;
+  margin: 0px;
   position: relative;
   background: #117A11; 
   border-radius: 30px;   
@@ -72,7 +72,11 @@ body {
 	background: #86EF86;
 }
 
-#ugolkrug{
+#left_cont {
+  padding-top: 0;
+}
+
+#ugolkrug, #ugolkrug1, #ugolkrug2 {
   width:200px; /* Длина фигуры */
   max-height:400px; /* Высота фигуры */
   color: #000000; /* цвет текста */
@@ -80,9 +84,9 @@ body {
   border: 2px #7f7f7f solid; /* стили рамки */
   border-radius: 10px;
   padding: 5px; /* внутренние отступы */
-  margin: 0 auto;
   margin-top: 1%;
   box-shadow: 0 0 10px #444;
+  margin-left: 3%
 }
 
 #title{
@@ -124,4 +128,14 @@ hr {
 .sticky {
     position: sticky;
     top: 0;
+}
+
+#column {
+  -webkit-column-count:2;  
+  -moz-column-count:2;  
+  column-count:2;
+}
+
+#ugolkrug1 {
+  margin-left: 73%;
 }

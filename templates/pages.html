@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="shortcut icon" href="/static/favicon/favicon.ico" type="image/x-icon">
+		<link href="/static/css/style.css" rel="stylesheet">
+		{% block styles %}{% endblock %}
+	</head>
+
+	<body>
+		<nav class="top-menu sticky">
+			<ul class="menu-main">
+				<li><a href="/" class="{{ main }}">Главная</a></li>
+				<li><a href="/order" class="{{ order }}">Заказать</a></li>
+				<li><a href="/FAQ" class="{{ faq }}">FAQ</a></li>
+				<li><a href="/contacts" class="{{ contacts }}">Контакты</a></li>
+			</ul>
+		</nav>
+		{% block content %}{% endblock %}
+	</body>

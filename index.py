@@ -12,14 +12,18 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 @app.route('/')
 def welcome():
-    return render_template("main_page.html")
+    return render_template("main_page.html", main="current")
 
 
 @app.route('/order')
 def order():
     ask = render_template('card.html')
-    test_page = [ask for _ in range(10)]
-    return render_template("order_page.html").format(' '.join(test_page))
+    test_page = []
+    prev = ''
+    for i in range(10):
+        num = i // (10 // 2) + 1
+        test_page.append(ask.format(str(num)))
+    return render_template("order_page.html", order="current").format(' '.join(test_page))
 
 
 @app.route('/contacts')
