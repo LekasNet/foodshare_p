@@ -86,7 +86,6 @@ body {
   padding: 5px; /* внутренние отступы */
   margin-top: 1%;
   box-shadow: 0 0 10px #444;
-  margin-left: 3%
 }
 
 #title{
@@ -134,8 +133,15 @@ hr {
   -webkit-column-count:2;  
   -moz-column-count:2;  
   column-count:2;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
-#ugolkrug1 {
-  margin-left: 73%;
+#top {
+  height: 100%;
+}
+
+#bottom-menu {
+  background: 383838;
+  position: relative;
 }
