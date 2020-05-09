@@ -145,3 +145,16 @@ hr {
   background: 383838;
   position: relative;
 }
+
+form.login_form {
+    margin: 0 auto;
+    max-width: 450px;
+    background-color: #117A11;
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+input.form_control, #email, #password {
+  margin-top: 2px;
+}

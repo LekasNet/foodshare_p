@@ -1,15 +1,24 @@
 from flask import Flask, render_template, url_for, request, flash, redirect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from werkzeug.utils import secure_filename
 from flask_ngrok import run_with_ngrok
 from forms import LoginForm
+from random import randint
 import os
 
 
 app = Flask(__name__, static_folder="static")
-run_with_ngrok(app)
+debug = 1
+if not debug:
+    run_with_ngrok(app)
+
 
 SECRET_KEY = os.urandom(32)
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['SECRET_KEY'] = SECRET_KEY
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 request_name = ''
 logins = ['adm', 'adm2', 'adm3']
@@ -49,6 +58,20 @@ def test():
     return render_template("test_page.html")
 
 
+@app.route("/contribute", methods=['GET', 'POST'])
+def give_page():
+    if request.method == "GET":
+        return render_template('contribute.html')
+    elif request.method == 'POST':
+        image_request = randint(0, 100000)
+        print(request.form['email'])
+        print(request.form['password'])
+        f = request.files['file']
+        f.save(f"static/img/{image_request}.jpg")
+        print(request.form['about'])
+        return redirect('/order')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global request_name
@@ -77,6 +100,7 @@ def add_card():
 
 
 if __name__ == '__main__':
-    '''port = int(os.environ.get("PORT", 5000))
-    host='0.0.0.0', port=port'''
-    app.run()
+    if debug:
+        app.run(port=8080, host="127.0.0.1")
+    else:
+        app.run()
