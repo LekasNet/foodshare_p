@@ -2,10 +2,18 @@ from flask import Flask, render_template, url_for, request, flash, redirect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from werkzeug.utils import secure_filename
 from flask_ngrok import run_with_ngrok
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database import Foodshare, Base
 from forms import LoginForm
 from random import randint
 import os
 
+engine = create_engine('sqlite:///FoodShare.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 app = Flask(__name__, static_folder="static")
 debug = 1
@@ -14,15 +22,21 @@ if not debug:
 
 
 SECRET_KEY = os.urandom(32)
-UPLOAD_FOLDER = '/path/to/the/uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 request_name = ''
 logins = ['adm', 'adm2', 'adm3']
 adm = (request_name in logins)
+
+
+def naming():
+    while True:
+        image_request = randint(0, 100000000)
+        try:
+            open(f"static/img/{image_request}.jpg")
+        except FileNotFoundError:
+            return image_request
 
 
 @app.route('/')
@@ -34,22 +48,24 @@ def welcome():
 
 @app.route('/order')
 def order():
-    ask = render_template('card.html')
     test_page = []
-    prev = ''
-    for i in range(10):
-        num = i // (10 // 2) + 1
-        test_page.append(ask.format(str(num)))
+    for i in session.query(Foodshare).filter_by(confirmed=1).all():
+        image = f"static/img/{i.image}.jpg"
+        test_page.append(render_template("card.html", name=i.name, price=i.price, description=i.description, image=image))
+        session.commit()
+    adm = request_name in logins
     return render_template("order_page.html", order="current", adm=adm).format(' '.join(test_page))
 
 
 @app.route('/contacts')
 def contacts():
+    adm = request_name in logins
     return render_template("contact_page.html", contacts="current", adm=adm)
 
 
 @app.route('/FAQ')
 def faq():
+    adm = request_name in logins
     return render_template("faq_page.html", faq="current", adm=adm)
 
 
@@ -63,12 +79,17 @@ def give_page():
     if request.method == "GET":
         return render_template('contribute.html')
     elif request.method == 'POST':
-        image_request = randint(0, 100000)
-        print(request.form['email'])
-        print(request.form['password'])
+        image = naming()
+        email = request.form['email']
+        password = request.form['password']
         f = request.files['file']
-        f.save(f"static/img/{image_request}.jpg")
-        print(request.form['about'])
+        f.save(f"static/img/{image}.jpg")
+        description = request.form['about']
+        price = request.form['price']
+        product = Foodshare(
+            name=email, contacts=password, description=description, image=image, confirmed=0, price=price)
+        session.add(product)
+        session.commit()
         return redirect('/order')
 
 
@@ -84,19 +105,42 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-"""
-@app.route('/add_card', methods=['GET', 'POST'])
-def add_card():
-    form = LoginForm()
-    if form.validate_on_submit():
-        f = form.photo.data
-        datafilename = secure_filename(f.filename)
-        f.save(os.path.join(
-            app.instance_path, 'photos', filename
-        ))
-        return redirect(url_for('index'))
-    return render_template('upload.html', form=form)
-"""
+@app.route('/adm_panel', methods=['GET', 'POST'])
+def administrate():
+    if request.method == 'POST':
+        print(request.form['submit'])
+        id = int(request.form['submit'].split("-")[1])
+
+        if "add" in request.form['submit']:
+            action_card = session.query(Foodshare).filter_by(id=id).one()
+            action_card.confirmed = 1
+            session.add(action_card)
+            session.commit()
+        else:
+            to_delete = session.query(Foodshare).filter_by(id=id).one()
+            session.delete(to_delete)
+            session.commit()
+
+        test_page = []
+        if not session.query(Foodshare).filter_by(confirmed=0).first():
+            for i in session.query(Foodshare).filter_by(confirmed=0).all():
+                image = f"static/img/{i.image}.jpg"
+                test_page.append(
+                    render_template(
+                        "admin_card.html", name=i.name, price=i.price, description=i.description, image=image, id=i.id))
+                session.commit()
+            return render_template('admin_panel.html').format(' '.join(test_page))
+
+    else:
+        if not session.query(Foodshare).filter_by(confirmed=0).first():
+            test_page = []
+            for i in session.query(Foodshare).filter_by(confirmed=0).all():
+                image = f"static/img/{i.image}.jpg"
+                test_page.append(
+                    render_template(
+                        "admin_card.html", name=i.name, price=i.price, description=i.description, image=image, id=i.id))
+                session.commit()
+            return render_template('admin_panel.html').format(' '.join(test_page))
 
 
 if __name__ == '__main__':
